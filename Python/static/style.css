@@ -1,0 +1,72 @@
+#gyro3d {
+
+    height: 400px;
+    background: #111;
+    border: 1px solid #333;
+}
+
+#content {
+    display: flex;
+    flex-direction: column; /* mieux pour 3D + vidéo */
+    height: 20%;
+    gap: 20px;
+}
+
+#video {
+    flex: 1;
+    height: 100%;
+}
+
+#gyro{
+    flex: 1;
+}
+
+#battery_bar {
+    width: 200px;
+    height: 25px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #222;
+    position: relative;
+    margin-top: 10px;
+}
+
+#battery_level {
+    width: 100%;
+    height: 100%;
+    background-color: #696969; /* Couleur verte pour le niveau de batterie */
+    border-radius: 3px;
+    position: relative;
+    overflow: hidden;
+}
+
+#battery_fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0; /* La largeur sera mise à jour dynamiquement */
+    background-color: #36690c; /* Couleur plus claire pour le remplissage */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #000;
+    font-weight: bold;
+}
+
+#controls {
+    margin-top: 10px;
+}
+
+#controls button, #controls input {
+    margin-right: 10px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#controls input {
+    width: 150px;
+}
+
+

@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>Robot Control</title>
+        <meta name="description" content="Page local controle voiture autonome">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    <body>
+        <h1>Robot Control</h1>
+        <div id="captors">
+            <p>Battery : <span id="battery_percent">--</span>% | <span id="battery">--</span>V</p>
+            <div id="battery_bar">
+                <div id="battery_level">
+                    <div id="battery_fill">
+                        <span id="battery_percent">--</span>
+                    </div>
+                </div>
+            </div>
+            <p>
+                Gyro :
+                x <span id="gyro_x">--</span>
+                y <span id="gyro_y">--</span>
+                z <span id="gyro_z">--</span>
+            </p>
+            <p>
+                Accel :
+                x <span id="accel_x">--</span>
+                y <span id="accel_y">--</span>
+                z <span id="accel_z">--</span>
+            </p>
+            <p>Distance front : <span id="distance_front">--</span> cm</p>
+            <p>Temp : <span id="temp">--</span> °C</p>  
+            <p>Vitesse : <span id="vitesse">--</span></p>
+            <p>Sensibilité : <span id="sensibilite">--</span></p>
+            <p>Action active : <span id="action_active">--</span></p>
+        </div>
+        <div id="controls">
+            <button id="start">Start</button>
+            <button id="stop">Stop</button>
+            <button id="reconnect_arduino">Reconnect Arduino</button>
+            <input type="number" id="vitesse_input" placeholder="Vitesse (base : 15)" min="0" max="100" value="15"/>
+            <input type="number" id="sensibilite_input" placeholder="Sensibilité (base : 15)" min="0" max="100" value="60"/>
+        </div>
+        <div id="content">
+            <div id="gyro">
+                <h2>Gyro</h2>
+                <div id="gyro3d"></div>
+            </div>
+            <div id="video">
+                <h2>Vidéo</h2>
+                <img src="/video_feed" width="640" height="480">
+            </div>
+        </div>
+        
+        
+        
+
+
+        <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+        <script src="{{ url_for('static', filename='script.js') }}"></script>
+    </body>
+</html>
