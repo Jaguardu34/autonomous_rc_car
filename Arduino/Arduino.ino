@@ -1,6 +1,7 @@
 #include <Servo.h>
 #include <NewPing.h>
 #include <Adafruit_MPU6050.h>
+#include <RCSwitch.h>
 
 #define NB_SERVOS 2
 
@@ -23,8 +24,12 @@ float tempC;
 #define ECHO_PIN     3
 #define MAX_DISTANCE 200
 #define BATTERY_PIN A1
+#define MPU6050_ADDR 0x68
+#define EMITTER_PIN 4
 
 Adafruit_MPU6050 mpu;
+RCSwitch mySwitch = RCSwitch();
+
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 
@@ -36,7 +41,9 @@ void setup()
     servo[1].attach(11);
     servo[0].write(90);
     servo[1].write(90);
-    mpu.begin(0x68);
+    mpu.begin(MPU6050_ADDR);
+    mySwitch.enableTransmit(4);
+
 
 }
 
@@ -111,6 +118,7 @@ void sendInfo(){
     const unsigned long interval = 100; // 1 seconde
   
     unsigned long currentMillis = millis();
+    
   
     if (currentMillis - previousMillis >= interval) {
         previousMillis = currentMillis;
@@ -131,6 +139,7 @@ void sendInfo(){
         Serial.print(tempC);
         Serial.print(",");
         Serial.println(distance);
+        mySwitch.send(distance, 24); // Envoyer la tension de la batterie sur 24 bits
     }
 
 }
@@ -148,4 +157,6 @@ void updateMPU() {
     // Traitez les données de l'accéléromètre (a), du gyroscope (g) et de la température (temp) selon vos besoins
 }
 
-    
+
+
+

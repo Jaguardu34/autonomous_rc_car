@@ -25,6 +25,7 @@
                 "/home/lucas/.arduino15/packages/arduino/hardware/avr/1.8.7/libraries/Wire/src",
                 "/home/lucas/.arduino15/packages/arduino/hardware/avr/1.8.7/libraries/SPI/src",
                 "/home/lucas/Arduino/libraries/Adafruit_Unified_Sensor",
+                "/home/lucas/Arduino/libraries/rc-switch-2.6.4",
                 "/home/lucas/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
                 "/home/lucas/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
                 "/home/lucas/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"
