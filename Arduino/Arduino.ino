@@ -1,7 +1,6 @@
 #include <Servo.h>
 #include <NewPing.h>
 #include <Adafruit_MPU6050.h>
-#include <RCSwitch.h>
 
 #define NB_SERVOS 2
 
@@ -9,6 +8,8 @@ Servo servo[NB_SERVOS];
 
 int posservo = 90;
 int posservo2 = 90;
+
+bool radioState = false;
 
 const float R1 = 10200.0; // 10.2 kΩ
 const float R2 = 2000.0;  // 2 kΩ
@@ -20,15 +21,14 @@ float gyroX, gyroY, gyroZ;
 float tempC;
 
 
-#define TRIGGER_PIN  2
-#define ECHO_PIN     3
+#define TRIGGER_PIN  6
+#define ECHO_PIN     7
 #define MAX_DISTANCE 200
 #define BATTERY_PIN A1
 #define MPU6050_ADDR 0x68
-#define EMITTER_PIN 4
+
 
 Adafruit_MPU6050 mpu;
-RCSwitch mySwitch = RCSwitch();
 
 
 NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
@@ -41,16 +41,17 @@ void setup()
     servo[1].attach(11);
     servo[0].write(90);
     servo[1].write(90);
-    mpu.begin(MPU6050_ADDR);
-    mySwitch.enableTransmit(4);
-
+    if (!mpu.begin(MPU6050_ADDR)) {
+        Serial.println("MPU6050 not found!");
+        while (1);
+    }
 
 }
 
 void loop()
 {
     ReceiveData();
-    updateCaptor();
+    updateCaptorDistance();
     updateBatteryJetson();
     updateMPU();
     sendInfo();
@@ -89,7 +90,7 @@ void parseAndMove(char *data) {
     }
 }
 
-void updateCaptor() {
+void updateCaptorDistance() {
   static unsigned long previousMillis = 0;
   const unsigned long interval = 100; // 1 seconde
 
@@ -139,7 +140,6 @@ void sendInfo(){
         Serial.print(tempC);
         Serial.print(",");
         Serial.println(distance);
-        mySwitch.send(distance, 24); // Envoyer la tension de la batterie sur 24 bits
     }
 
 }
@@ -156,6 +156,9 @@ void updateMPU() {
     tempC = temp.temperature;
     // Traitez les données de l'accéléromètre (a), du gyroscope (g) et de la température (temp) selon vos besoins
 }
+
+
+
 
 
 

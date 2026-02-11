@@ -28,7 +28,7 @@ battery_percent = 0
 action_active = False
 SILENCE_TIMEOUT = 0.5 # secondes
 vitesse = 15
-sensibilite = 60.0
+sensibilite = 90.0
 distance_front = 0.0
 
 app = Flask(__name__)
@@ -131,7 +131,6 @@ def main_loop() :
                     action_active = False
         else:
             control.stop()
-        print(f"Distance frontale: {distance_front:.2f} cm")
         time.sleep(0.05)
 
             
@@ -237,7 +236,6 @@ def gen_frames():
         direction_history.append(direction_raw)
         direction = int(np.mean(direction_history))
         
-        print(f"Direction brute: {direction_raw:4d} → Lissée: {direction:4d}")
         
         cv2.putText(frame, f"Direction: {direction}", (10, 30), 
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 255), 2)
