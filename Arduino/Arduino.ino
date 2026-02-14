@@ -45,6 +45,7 @@ void setup()
         Serial.println("MPU6050 not found!");
         while (1);
     }
+    Serial.println("BOOT,1.0");
 
 }
 

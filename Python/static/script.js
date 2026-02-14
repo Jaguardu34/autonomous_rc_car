@@ -112,12 +112,6 @@ document.getElementById("stop").addEventListener("click", () => {
 });
 
 
-document.getElementById("reconnect_arduino").addEventListener("click", () => {
-    fetch("/reconnect_arduino", { method: "POST" })
-        .then(response => response.json())
-        .then(data => console.log(data));
-});
-
 
 document.getElementById("vitesse_input").addEventListener("change", (event) => {
     const vitesse = parseInt(event.target.value);

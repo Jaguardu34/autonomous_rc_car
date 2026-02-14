@@ -30,29 +30,25 @@ SILENCE_TIMEOUT = 0.5 # secondes
 vitesse = 15
 sensibilite = 90.0
 distance_front = 0.0
+last_received_time=0.0
 
 app = Flask(__name__)
 
-control.init_serial()
 
 
+control.init_serial();
 
 
 def get_data():
-    global battery, gyro_x, gyro_y, gyro_z, accel_x, accel_y, accel_z, temp, battery_percent, distance_front
+    global battery, gyro_x, gyro_y, gyro_z, accel_x, accel_y, accel_z, temp, battery_percent, distance_front, last_received_time
     
-    serial = control.safe_read()
+    serial = control.read_serial()
     
     now = time.time() 
     
-    if serial is None:
-        if now - control.last_receive_time > SILENCE_TIMEOUT:
-                    print("Silence prolongé → reset du port série")
-                    control.reconnect_serial()
-                    control.last_receive_time = now
-        return # trame invalide, on ignore
-    else:
-        control.last_receive_time = now
+    if serial == None :
+        return
+
     
     x = float(serial[2])
     y = float(serial[1])
@@ -99,22 +95,26 @@ def get_data():
 
 def start_active():
     global action_active, distance_front
-    if distance_front > 45:
-        action_active = True
-    else:
+    if distance_front < 45 and distance_front != 0:
         action_active = False
+    else:
+        action_active = True
 def main_loop() :
     print("Boucle principaled démarrée")
     global direction, action_active; distance_front, accel_x, accel_y
     first_time_backward = True
     while True:
         get_data()
-        
-        if accel_x > 0.5 or accel_x < -0.5 or accel_y > 0.5 or accel_y < -0.5:
-            action_active = False
-        
+ 
         if action_active:
-            if distance_front > 40:
+            if distance_front < 40 and distance_front != 0:
+                if first_time_backward:
+                    control.move(60, "b")
+                    time.sleep(0.5)
+                    first_time_backward = False
+                    action_active = False
+                
+            else:
                 first_time_backward = True
                 control.move(vitesse)
                 if direction < 0:
@@ -123,12 +123,7 @@ def main_loop() :
                     control.right(direction)
                 else:
                     control.center()
-            else:
-                if first_time_backward:
-                    control.move(60, "b")
-                    time.sleep(0.5)
-                    first_time_backward = False
-                    action_active = False
+                
         else:
             control.stop()
         time.sleep(0.05)
@@ -287,12 +282,6 @@ def stop_action():
     action_active = False
     return jsonify({"status": "stopped", "action_active": action_active})
 
-@app.route("/reconnect_arduino", methods=["POST"])
-def reconnect_arduino():
-    global action_active
-    action_active = False
-    control.reconnect_serial()
-    return jsonify({"status": "reconnected", "action_active": action_active})
 
 @app.route("/set_vitesse", methods=["POST"])
 def set_vitesse():
